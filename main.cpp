@@ -1,13 +1,20 @@
+#include <iostream>
+
 
 namespace top {
   struct p_t {
     int x,y;
   };
 
+  struct Frame_t {
+    p_t leftBott, rightTop;
+  };
+
   struct IDraw {
     virtual p_t begin() const = 0;
     virtual p_t next() const = 0;
   };
+
 
   struct Dot : IDraw {
     p_t o;
@@ -17,8 +24,14 @@ namespace top {
 
   };
 
+  void make_f(IDraw** f, size_t k)
+  {
 
-
+  }
+  void getPoints(IDraw* f, p_t** ps, size_t& s);
+  Frame_t buildFrame(const p_t* ps, size_t s);
+  char* buildCanvas(Frame_t fr);
+  void paintCanvas(char* cnv, Frame_t fr, size_t k, char f);
   bool operator==(p_t a, p_t b)
   {
     return a.x == b.x && a.y == b.y;
@@ -34,6 +47,18 @@ namespace top {
 
 int main()
 {
+  top::IDraw* f[3] = {};
+  top::p_t* p = nullptr;
+  size_t s = 0;
+  char* cnv = nullptr;
+  try {
+    top::make_f(f, 3);
+    for (size_t i = 0; i < 3; ++i) {
+      top::getPoints(f[i], &p, s);
+    }
+    top::Frame_t fr = top::buildFrame(p, s);
+    cnv = top::buildCanvas(fr);
+  } catch(...) {}
 
 
 
