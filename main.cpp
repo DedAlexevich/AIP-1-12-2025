@@ -1,15 +1,23 @@
 
-
-
 namespace top {
   struct p_t {
     int x,y;
   };
 
   struct IDraw {
-    virtual p_t begin()=0;
-    virtual p_t next() = 0;
+    virtual p_t begin() const = 0;
+    virtual p_t next() const = 0;
   };
+
+  struct Dot : IDraw {
+    p_t o;
+    Dot(int x, int y) : IDraw(), o{x,y} {}
+    p_t begin() const override;
+    p_t next() const override;
+
+  };
+
+
 
   bool operator==(p_t a, p_t b)
   {
@@ -29,4 +37,14 @@ int main()
 
 
 
+}
+
+top::p_t top::Dot::next() const
+{
+  return begin();
+}
+
+top::p_t top::Dot::begin() const
+{
+  return o;
 }
