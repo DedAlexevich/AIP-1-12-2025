@@ -25,14 +25,12 @@ namespace top {
   };
 
   void make_f(IDraw** f, size_t k)
-  {
-
-  }
-  void getPoints(IDraw* f, p_t** ps, size_t& s);
-  Frame_t buildFrame(const p_t* ps, size_t s);
-  char* buildCanvas(Frame_t fr);
-  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f);
-  void printCanvas(char* cnv, Frame_t fr);
+  {}
+  void getPoints(IDraw* f, p_t** ps, size_t& s) {}
+  Frame_t buildFrame(const p_t* ps, size_t s) {} // Ищем мин и макс для х и у
+  char* buildCanvas(Frame_t fr) {} // на основе фрейма считаем макс - мин + 1
+  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f) {} // координаты перевести в коорд канваса ужас
+  void printCanvas(char* cnv, Frame_t fr) {}  // ТОЛЬКО ПОПРОБУЙ ВЫВЕСТИ ЛИШНИЙ ПРОБЕЛ!!!!
   bool operator==(p_t a, p_t b)
   {
     return a.x == b.x && a.y == b.y;
