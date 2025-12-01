@@ -13,6 +13,7 @@ namespace top {
   struct IDraw {
     virtual p_t begin() const = 0;
     virtual p_t next() const = 0;
+    virtual ~IDraw() = default;
   };
 
 
@@ -22,6 +23,7 @@ namespace top {
     p_t begin() const override;
     p_t next() const override;
 
+    ~Dot() override = default;
   };
 
   void make_f(IDraw** f, size_t k)
