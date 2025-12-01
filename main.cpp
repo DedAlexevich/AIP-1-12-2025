@@ -31,7 +31,8 @@ namespace top {
   void getPoints(IDraw* f, p_t** ps, size_t& s);
   Frame_t buildFrame(const p_t* ps, size_t s);
   char* buildCanvas(Frame_t fr);
-  void paintCanvas(char* cnv, Frame_t fr, size_t k, char f);
+  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f);
+  void printCanvas(char* cnv, Frame_t fr);
   bool operator==(p_t a, p_t b)
   {
     return a.x == b.x && a.y == b.y;
@@ -51,6 +52,7 @@ int main()
   top::p_t* p = nullptr;
   size_t s = 0;
   char* cnv = nullptr;
+  int statusCode = 0;
   try {
     top::make_f(f, 3);
     for (size_t i = 0; i < 3; ++i) {
@@ -58,10 +60,19 @@ int main()
     }
     top::Frame_t fr = top::buildFrame(p, s);
     cnv = top::buildCanvas(fr);
-  } catch(...) {}
+    top::paintCanvas(cnv, fr, p, s, 'o');
+    top::printCanvas(cnv, fr);
+  } catch(...) {
+    statusCode = 1;
+  }
 
+  delete f[0];
+  delete f[1];
+  delete f[2];
+  delete[] p;
+  delete[] cnv;
 
-
+  return statusCode;
 }
 
 top::p_t top::Dot::next() const
