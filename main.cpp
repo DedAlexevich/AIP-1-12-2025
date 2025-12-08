@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 namespace top {
   struct p_t {
     int x,y;
@@ -26,7 +25,6 @@ namespace top {
     virtual ~IDraw() = default;
   };
 
-
   struct Dot : IDraw {
     Dot(int x, int y) : IDraw(), o{x,y} {}
     ~Dot() override = default;
@@ -34,9 +32,9 @@ namespace top {
     p_t next(p_t p) const override;
     p_t o;
   };
-
+  void extend(p_t** ps, size_t s, p_t p);
   void make_f(IDraw** f, size_t k);
-  void getPoints(IDraw* f, p_t** ps, size_t& s);
+  size_t getPoints(IDraw* f, p_t** ps, size_t& s);
   Frame_t buildFrame(const p_t* ps, size_t s); // Ищем мин и макс для х и у
   char* buildCanvas(Frame_t fr); // на основе фрейма считаем макс - мин + 1
   void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f); // координаты перевести в коорд канваса ужас
@@ -112,14 +110,37 @@ void top::make_f(IDraw** f, size_t k)
   f[2] = new Dot(7, 7);
 }
 
-void top::getPoints(IDraw* f, p_t** ps, size_t& s)
+void top::extend(p_t** ps, size_t s, p_t p)
 {
-  p_t a = f->begin();
-  // На паре
+  size_t upd_s = s + 1;
+  top::p_t* res = new top::p_t[upd_s];
+  for (size_t i = 0; i < s; ++i) {
+    res[i] = (*ps)[i];
+  }
+  res[s] = p;
+  delete[] *ps;
+  *ps = res;
+}
+
+size_t top::getPoints(IDraw* f, p_t** ps, size_t& s)
+{
+  p_t p = f->begin();
+  extend(ps, s, p);
+  size_t delta = 1;
+  while (f->next(p) != f->begin()) {
+    p = f->next(p);
+    extend(ps, s+delta, p);
+    delta++;
+  }
+   return delta;
 }
 
 top::Frame_t top::buildFrame(const p_t* ps, size_t s)
 {
+
+
+
+
 }
 
 char* top::buildCanvas(Frame_t fr)
