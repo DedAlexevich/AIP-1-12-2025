@@ -32,12 +32,13 @@ namespace top {
     p_t next(p_t p) const override;
     p_t o;
   };
+
   void extend(p_t** ps, size_t s, p_t p);
   void make_f(IDraw** f, size_t k);
   size_t getPoints(IDraw* f, p_t** ps, size_t& s);
   Frame_t buildFrame(const p_t* ps, size_t s); // Ищем мин и макс для х и у
-  char* buildCanvas(Frame_t fr); // на основе фрейма считаем макс - мин + 1
-  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f); // координаты перевести в коорд канваса ужас
+  char* buildCanvas(Frame_t fr, char); // на основе фрейма считаем макс - мин + 1
+  void paintCanvas(char* cnv, Frame_t fr, p_t p, size_t k, char f); // координаты перевести в коорд канваса ужас
   void printCanvas(char* cnv, Frame_t fr);  // ТОЛЬКО ПОПРОБУЙ ВЫВЕСТИ ЛИШНИЙ ПРОБЕЛ!!!!
 
   struct VLine : IDraw {
@@ -64,7 +65,6 @@ namespace top {
     p_t start;
     int len;
   };
-
 }
 
 
@@ -73,7 +73,7 @@ int main()
 {
   top::IDraw* f[3] = {};
   top::p_t* p = nullptr;
-  size_t s = 0;
+  size_t s = 3;
   char* cnv = nullptr;
   int statusCode = 0;
   try {
@@ -82,8 +82,8 @@ int main()
       top::getPoints(f[i], &p, s);
     }
     top::Frame_t fr = top::buildFrame(p, s);
-    cnv = top::buildCanvas(fr);
-    top::paintCanvas(cnv, fr, p, s, 'o');
+    cnv = top::buildCanvas(fr, '0');
+    top::paintCanvas(cnv, fr, *p, s, 'o');
     top::printCanvas(cnv, fr);
   } catch(...) {
     statusCode = 1;
@@ -106,7 +106,7 @@ top::p_t top::Dot::next(p_t p) const
 void top::make_f(IDraw** f, size_t k)
 {
   f[0] = new Dot(0, 0);
-  f[1] = new Dot(-1, -5);
+  f[1] = new Dot(1, -5);
   f[2] = new Dot(7, 7);
 }
 
@@ -153,16 +153,42 @@ top::Frame_t top::buildFrame(const p_t* ps, size_t s)
   return {aa, bb};
 }
 
-char* top::buildCanvas(Frame_t fr)
+size_t rows(top::Frame_t fr)
 {
+  return fr.rightTop.y - fr.leftBott.y + 1;
 }
 
-void top::paintCanvas(char* cnv, Frame_t fr, const p_t* ps, size_t k, char f)
+size_t cols(top::Frame_t fr)
 {
+  return fr.rightTop.x - fr.leftBott.x + 1;
+}
+
+
+
+char* top::buildCanvas(Frame_t fr, char fill)
+{
+  char* newcanws = new char[rows(fr)*cols(fr)];
+  for (size_t i = 0; i < rows(fr)*cols(fr);++i) {
+    newcanws[i] = fill;
+  }
+  return newcanws;
+}
+
+void top::paintCanvas(char* cnv, Frame_t fr, p_t p, size_t k, char f)
+{
+  int dx = p.x - fr.leftBott.x;
+  int dy = fr.rightTop.y - p.y;
+  cnv[dy * cols(fr) + dx] = f;
 }
 
 void top::printCanvas(char* cnv, Frame_t fr)
 {
+  for (size_t i = 0; i < rows(fr); ++i) {
+    for (size_t j = 0; j < cols(fr); ++j) {
+      std::cout << cnv[i*cols(fr) + j];
+    }
+    std::cout << '\n';
+  }
 }
 
 top::p_t top::Dot::begin() const
@@ -248,23 +274,6 @@ top::p_t top::Square::next(p_t p) const
     return {p.x - 1, p.y};
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
