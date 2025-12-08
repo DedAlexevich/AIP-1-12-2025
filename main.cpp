@@ -155,7 +155,10 @@ top::p_t top::VLine::next(p_t p) const
   if (p.y == start.y + length) {
     return start;
   }
-  return p_t{start.x, p.y + 1};
+  if (length > 0) {
+    return p_t{start.x, p.y + 1};
+  }
+  return p_t{start.x, p.y - 1};
 }
 
 top::HLine::HLine(int x, int y, int len) : IDraw(), start{x, y}, length(len)
@@ -175,7 +178,10 @@ top::p_t top::HLine::next(p_t p) const
   if (p.x == start.x + length) {
     return start;
   }
-  return p_t{p.x + 1, start.y };
+  if (length > 0) {
+    return p_t{p.x + 1, start.y };
+  }
+  return p_t{p.x - 1, start.y };
 }
 
 top::Square::Square(int x, int y, int len) : IDraw(), start{x, y}, length(len)
