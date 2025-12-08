@@ -35,13 +35,12 @@ namespace top {
     p_t o;
   };
 
-  void make_f(IDraw** f, size_t k)
-  {}
-  void getPoints(IDraw* f, p_t** ps, size_t& s) {}
-  Frame_t buildFrame(const p_t* ps, size_t s) {} // Ищем мин и макс для х и у
-  char* buildCanvas(Frame_t fr) {} // на основе фрейма считаем макс - мин + 1
-  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f) {} // координаты перевести в коорд канваса ужас
-  void printCanvas(char* cnv, Frame_t fr) {}  // ТОЛЬКО ПОПРОБУЙ ВЫВЕСТИ ЛИШНИЙ ПРОБЕЛ!!!!
+  void make_f(IDraw** f, size_t k);
+  void getPoints(IDraw* f, p_t** ps, size_t& s);
+  Frame_t buildFrame(const p_t* ps, size_t s); // Ищем мин и макс для х и у
+  char* buildCanvas(Frame_t fr); // на основе фрейма считаем макс - мин + 1
+  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f); // координаты перевести в коорд канваса ужас
+  void printCanvas(char* cnv, Frame_t fr);  // ТОЛЬКО ПОПРОБУЙ ВЫВЕСТИ ЛИШНИЙ ПРОБЕЛ!!!!
 
   struct VLine : IDraw {
     VLine(int x, int y, int len);
@@ -103,6 +102,35 @@ int main()
 top::p_t top::Dot::next(p_t p) const
 {
   return begin();
+}
+
+void top::make_f(IDraw** f, size_t k)
+{
+  f[0] = new Dot(0, 0);
+  f[1] = new Dot(-1, -5);
+  f[2] = new Dot(7, 7);
+}
+
+void top::getPoints(IDraw* f, p_t** ps, size_t& s)
+{
+  p_t a = f->begin();
+  // На паре
+}
+
+top::Frame_t top::buildFrame(const p_t* ps, size_t s)
+{
+}
+
+char* top::buildCanvas(Frame_t fr)
+{
+}
+
+void top::paintCanvas(char* cnv, Frame_t fr, const p_t* ps, size_t k, char f)
+{
+}
+
+void top::printCanvas(char* cnv, Frame_t fr)
+{
 }
 
 top::p_t top::Dot::begin() const
