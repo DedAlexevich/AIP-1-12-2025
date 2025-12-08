@@ -6,33 +6,6 @@ namespace top {
     int x,y;
   };
 
-  struct Frame_t {
-    p_t leftBott, rightTop;
-  };
-
-  struct IDraw {
-    virtual p_t begin() const = 0;
-    virtual p_t next() const = 0;
-    virtual ~IDraw() = default;
-  };
-
-
-  struct Dot : IDraw {
-    p_t o;
-    Dot(int x, int y) : IDraw(), o{x,y} {}
-    p_t begin() const override;
-    p_t next() const override;
-
-    ~Dot() override = default;
-  };
-
-  void make_f(IDraw** f, size_t k)
-  {}
-  void getPoints(IDraw* f, p_t** ps, size_t& s) {}
-  Frame_t buildFrame(const p_t* ps, size_t s) {} // Ищем мин и макс для х и у
-  char* buildCanvas(Frame_t fr) {} // на основе фрейма считаем макс - мин + 1
-  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f) {} // координаты перевести в коорд канваса ужас
-  void printCanvas(char* cnv, Frame_t fr) {}  // ТОЛЬКО ПОПРОБУЙ ВЫВЕСТИ ЛИШНИЙ ПРОБЕЛ!!!!
   bool operator==(p_t a, p_t b)
   {
     return a.x == b.x && a.y == b.y;
@@ -42,6 +15,58 @@ namespace top {
   {
     return !(a == b);
   }
+
+  struct Frame_t {
+    p_t leftBott, rightTop;
+  };
+
+  struct IDraw {
+    virtual p_t begin() const = 0;
+    virtual p_t next(p_t p) const = 0;
+    virtual ~IDraw() = default;
+  };
+
+
+  struct Dot : IDraw {
+    Dot(int x, int y) : IDraw(), o{x,y} {}
+    ~Dot() override = default;
+    p_t begin() const override;
+    p_t next(p_t p) const override;
+    p_t o;
+  };
+
+  void make_f(IDraw** f, size_t k)
+  {}
+  void getPoints(IDraw* f, p_t** ps, size_t& s) {}
+  Frame_t buildFrame(const p_t* ps, size_t s) {} // Ищем мин и макс для х и у
+  char* buildCanvas(Frame_t fr) {} // на основе фрейма считаем макс - мин + 1
+  void paintCanvas(char* cnv, Frame_t fr, const p_t* ps , size_t k, char f) {} // координаты перевести в коорд канваса ужас
+  void printCanvas(char* cnv, Frame_t fr) {}  // ТОЛЬКО ПОПРОБУЙ ВЫВЕСТИ ЛИШНИЙ ПРОБЕЛ!!!!
+
+  struct VLine : IDraw {
+    VLine(int x, int y, int len);
+    p_t begin() const override;
+    p_t next(p_t p) const override;
+    p_t start;
+    int length;
+  };
+
+  struct HLine : IDraw {
+    HLine(int x, int y, int len);
+    p_t begin() const override;
+    p_t next(p_t p) const override;
+    p_t start;
+    int length;
+  };
+
+  struct Square : IDraw {
+    Square(int x, int y, int len);
+    p_t begin() const override;
+    p_t next(p_t p) const override;
+    p_t start;
+    int length;
+  };
+
 }
 
 
@@ -75,7 +100,7 @@ int main()
   return statusCode;
 }
 
-top::p_t top::Dot::next() const
+top::p_t top::Dot::next(p_t p) const
 {
   return begin();
 }
@@ -84,3 +109,78 @@ top::p_t top::Dot::begin() const
 {
   return o;
 }
+
+top::VLine::VLine(int x, int y, int len) : IDraw(), start{x,y}, length(len)
+{}
+
+top::p_t top::VLine::begin() const
+{
+  return start;
+}
+
+top::p_t top::VLine::next(p_t p) const
+{
+  if (p.y == start.y + length) {
+    return start;
+  }
+  return p_t{start.x, p.y + 1};
+}
+
+top::HLine::HLine(int x, int y, int len) : IDraw(), start{x, y}, length(len)
+{}
+
+top::p_t top::HLine::begin() const
+{
+  return start;
+}
+
+top::p_t top::HLine::next(p_t p) const
+{
+  if (p.x == start.x + length) {
+    return start;
+  }
+  return p_t{p.x + 1, start.y };
+}
+
+top::Square::Square(int x, int y, int len) : IDraw(), start{x, y}, length(len)
+{}
+
+top::p_t top::Square::begin() const
+{
+  return start;
+}
+
+top::p_t top::Square::next(p_t p) const
+{
+  if (p.y == start.y && p.x < start.x + length) {
+    return p_t{p.x + 1, p.y};
+  } else if (p.x == start.x + length && p.y < start.y + length) {
+    return p_t{p.x, p.y + 1};
+  } else if (p.y == start.y + length && p.x > start.x) {
+    return p_t{p.x - 1, p.y};
+  } else if (p.x == start.x && p.y > start.y) {
+    return p_t{p.x, p.y - 1};
+  }
+  return start;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
