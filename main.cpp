@@ -57,29 +57,60 @@ namespace top {
     int length;
   };
 
+  struct Rectangle: IDraw {
+    Rectangle(int x, int y, int a, int b);
+    p_t begin() const override;
+    p_t next(p_t p) const override;
+    p_t start;
+    int a_, b_;
+  };
+
+  Rectangle::Rectangle(int x, int y, int a, int b):
+    start{x,y},
+    a_(a),
+    b_(b)
+  {}
+
+  p_t Rectangle::begin() const
+  {
+    return start;
+  }
+
+  p_t Rectangle::next(p_t p) const
+  {
+    if (p.x == start.x && p.y < start.y + a_ - 1) {
+      return {p.x, p.y + 1};
+    } else if (p.y == start.y + a_ - 1 && p.x < start.x + b_ - 1) {
+      return {p.x + 1, p.y};
+    } else if (p.x == start.x + b_ - 1 && p.y > start.y) {
+      return {p.x, p.y - 1};
+    } else if (p.y == start.y && p.x > start.x) {
+      return {p.x - 1, p.y};
+    }
+    return start;
+  }
+
   struct Square: IDraw {
     Square(int x, int y, int l);
-    Square(p_t p, int l);
     p_t begin() const override;
     p_t next(p_t p) const override;
     p_t start;
     int len;
   };
 
-
   void extend(p_t** ps, size_t s, p_t p);
   size_t getPoints(IDraw* f, p_t** ps, size_t& s);
-  Frame_t buildFrame(const p_t* ps, size_t s); // Ищем мин и макс для х и у
-  char* buildCanvas(Frame_t fr, char); // на основе фрейма считаем макс - мин + 1
-  void paintCanvas(char* cnv, Frame_t fr, p_t * p, size_t k, char f); // координаты перевести в коорд канваса ужас
-  void printCanvas(char* cnv, Frame_t fr);  // ТОЛЬКО ПОПРОБУЙ ВЫВЕСТИ ЛИШНИЙ ПРОБЕЛ!!!!
+  Frame_t buildFrame(const p_t* ps, size_t s);
+  char* buildCanvas(Frame_t fr, char);
+  void paintCanvas(char* cnv, Frame_t fr, p_t * p, size_t k, char f);
+  void printCanvas(char* cnv, Frame_t fr);
 
 }
 
 int main()
 {
   using namespace top;
-  IDraw* f[6] = {};
+  IDraw* f[7] = {};
   p_t* p = new p_t[1];
   size_t s = 0;
   char* cnv = nullptr;
@@ -91,7 +122,8 @@ int main()
     f[3] = new VLine(4, 5, 3);
     f[4] = new HLine(2, 7, 4);
     f[5] = new DLine(-3, 1, 4);
-    for (size_t i = 0; i < 6; ++i) {
+    f[6] = new Rectangle(-10, -4, 4, 7);
+    for (size_t i = 0; i < 7; ++i) {
       getPoints(f[i], &p, s);
     }
     Frame_t fr = buildFrame(p, s);
@@ -108,6 +140,7 @@ int main()
   delete f[3];
   delete f[4];
   delete f[5];
+  delete f[6];
   delete[] p;
   delete[] cnv;
 
@@ -260,10 +293,6 @@ top::Square::Square(int x, int y, int l):
     throw std::invalid_argument("lenght can not be  <= 0");
   }
 }
-
-top::Square::Square(p_t p, int l):
-  Square(p.x, p.y, l)
-{}
 
 top::p_t top::Square::begin() const
 {
