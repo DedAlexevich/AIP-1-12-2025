@@ -139,7 +139,11 @@ top::p_t top::Dot::begin() const
 }
 
 top::VLine::VLine(int x, int y, int len) : IDraw(), start{x,y}, length(len)
-{}
+{
+  if (len == 0) {
+    throw std::logic_error("USER invalid");
+  }
+}
 
 top::p_t top::VLine::begin() const
 {
@@ -155,7 +159,11 @@ top::p_t top::VLine::next(p_t p) const
 }
 
 top::HLine::HLine(int x, int y, int len) : IDraw(), start{x, y}, length(len)
-{}
+{
+  if (len == 0) {
+    throw std::logic_error("USER invalid");
+  }
+}
 
 top::p_t top::HLine::begin() const
 {
