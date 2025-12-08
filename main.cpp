@@ -58,12 +58,13 @@ namespace top {
     int length;
   };
 
-  struct Square : IDraw {
-    Square(int x, int y, int len);
+  struct Square: IDraw {
+    Square(int x, int y, int l);
+    Square(p_t p, int l);
     p_t begin() const override;
     p_t next(p_t p) const override;
     p_t start;
-    int length;
+    int len;
   };
 
 }
@@ -152,7 +153,7 @@ top::p_t top::VLine::begin() const
 
 top::p_t top::VLine::next(p_t p) const
 {
-  if (p.y == start.y + length) {
+  if (p.y == start.y + length - 1) {
     return start;
   }
   if (length > 0) {
@@ -175,7 +176,7 @@ top::p_t top::HLine::begin() const
 
 top::p_t top::HLine::next(p_t p) const
 {
-  if (p.x == start.x + length) {
+  if (p.x == start.x + length - 1) {
     return start;
   }
   if (length > 0) {
@@ -184,8 +185,20 @@ top::p_t top::HLine::next(p_t p) const
   return p_t{p.x - 1, start.y };
 }
 
-top::Square::Square(int x, int y, int len) : IDraw(), start{x, y}, length(len)
-{}
+top::Square::Square(int x, int y, int l):
+  IDraw(),
+  start{x, y},
+  len(l)
+{
+  if (len <= 0) {
+    throw std::invalid_argument("lenght can not be  <= 0");
+  }
+}
+
+top::Square::Square(p_t p, int l)
+{
+  Square(p.x, p.y, l);
+}
 
 top::p_t top::Square::begin() const
 {
@@ -194,16 +207,15 @@ top::p_t top::Square::begin() const
 
 top::p_t top::Square::next(p_t p) const
 {
-  if (p.y == start.y && p.x < start.x + length) {
-    return p_t{p.x + 1, p.y};
-  } else if (p.x == start.x + length && p.y < start.y + length) {
-    return p_t{p.x, p.y + 1};
-  } else if (p.y == start.y + length && p.x > start.x) {
-    return p_t{p.x - 1, p.y};
-  } else if (p.x == start.x && p.y > start.y) {
-    return p_t{p.x, p.y - 1};
+  if (p.x == start.x && p.y < start.y + len - 1) {
+    return {p.x, p.y + 1};
+  } else if (p.y == start.y + len - 1 && p.x < start.x + len - 1) {
+    return {p.x + 1, p.y};
+  } else if (p.x == start.x + len - 1 && p.y > start.y) {
+    return {p.x, p.y - 1};
+  } else if (p.y == start.y && p.x > start.x) {
+    return {p.x - 1, p.y};
   }
-  return start;
 }
 
 
