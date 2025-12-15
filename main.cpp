@@ -1,29 +1,7 @@
 #include <iostream>
-
+#include "Geom.h"
+#include "IDraw.h"
 namespace top {
-  struct p_t {
-    int x,y;
-  };
-
-  bool operator==(p_t a, p_t b)
-  {
-    return a.x == b.x && a.y == b.y;
-  }
-
-  bool operator!=(p_t a, p_t b)
-  {
-    return !(a == b);
-  }
-
-  struct Frame_t {
-    p_t leftBott, rightTop;
-  };
-
-  struct IDraw {
-    virtual p_t begin() const = 0;
-    virtual p_t next(p_t p) const = 0;
-    virtual ~IDraw() = default;
-  };
 
   struct Dot : IDraw {
     Dot(int x, int y) : IDraw(), o{x,y} {}
@@ -82,8 +60,6 @@ namespace top {
     int len;
   };
 
-
-  void extend(p_t** ps, size_t s, p_t p);
   size_t getPoints(IDraw* f, p_t** ps, size_t& s);
   Frame_t buildFrame(const p_t* ps, size_t s);
   char* buildCanvas(Frame_t fr, char);
@@ -139,31 +115,6 @@ top::p_t top::Dot::next(p_t p) const
   return begin();
 }
 
-void top::extend(p_t** ps, size_t s, p_t p)
-{
-  size_t upd_s = s + 1;
-  p_t* res = new p_t[upd_s];
-  for (size_t i = 0; i < s; ++i) {
-    res[i] = (*ps)[i];
-  }
-  res[s] = p;
-  delete[] *ps;
-  *ps = res;
-}
-
-size_t top::getPoints(IDraw* f, p_t** ps, size_t& s)
-{
-  p_t p = f->begin();
-  extend(ps, s, p);
-  size_t delta = 1;
-  while (f->next(p) != f->begin()) {
-    p = f->next(p);
-    extend(ps, s+delta, p);
-    delta++;
-  }
-   return s+=delta;
-}
-
 top::Frame_t top::buildFrame(const p_t* ps, size_t s)
 {
   if (!s) {
@@ -180,16 +131,6 @@ top::Frame_t top::buildFrame(const p_t* ps, size_t s)
   p_t aa {minx, miny};
   p_t bb { maxx, maxy};
   return {aa, bb};
-}
-
-size_t rows(top::Frame_t fr)
-{
-  return fr.rightTop.y - fr.leftBott.y + 1;
-}
-
-size_t cols(top::Frame_t fr)
-{
-  return fr.rightTop.x - fr.leftBott.x + 1;
 }
 
 char* top::buildCanvas(Frame_t fr, char fill)
