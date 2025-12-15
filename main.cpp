@@ -1,24 +1,10 @@
 #include <iostream>
 #include "Geom.h"
 #include "IDraw.h"
+#include "Dot.h"
+#include "VLine.h"
+
 namespace top {
-
-  struct Dot : IDraw {
-    Dot(int x, int y) : IDraw(), o{x,y} {}
-    ~Dot() override = default;
-    p_t begin() const override;
-    p_t next(p_t p) const override;
-    p_t o;
-  };
-
-  struct VLine : IDraw {
-    VLine(int x, int y, int len);
-    p_t begin() const override;
-    p_t next(p_t p) const override;
-    p_t start;
-    int length;
-  };
-
   struct HLine : IDraw {
     HLine(int x, int y, int len);
     p_t begin() const override;
@@ -61,7 +47,6 @@ namespace top {
   };
 
   size_t getPoints(IDraw* f, p_t** ps, size_t& s);
-  Frame_t buildFrame(const p_t* ps, size_t s);
   char* buildCanvas(Frame_t fr, char);
   void paintCanvas(char* cnv, Frame_t fr, p_t * p, size_t k, char f);
   void printCanvas(char* cnv, Frame_t fr);
@@ -110,28 +95,6 @@ int main()
   return statusCode;
 }
 
-top::p_t top::Dot::next(p_t p) const
-{
-  return begin();
-}
-
-top::Frame_t top::buildFrame(const p_t* ps, size_t s)
-{
-  if (!s) {
-    throw std::logic_error("");
-  }
-  int minx = ps[0].x, maxx = ps[0].x;
-  int miny = ps[0].y, maxy = ps[0].y;
-  for (size_t i = 1; i < s; ++i) {
-    minx = std::min(minx, ps[i].x);
-    maxx = std::max(maxx, ps[i].x);
-    miny = std::min(miny, ps[i].y);
-    maxy = std::max(maxy, ps[i].y);
-  }
-  p_t aa {minx, miny};
-  p_t bb { maxx, maxy};
-  return {aa, bb};
-}
 
 char* top::buildCanvas(Frame_t fr, char fill)
 {
@@ -159,34 +122,6 @@ void top::printCanvas(char* cnv, Frame_t fr)
     }
     std::cout << '\n';
   }
-}
-
-top::p_t top::Dot::begin() const
-{
-  return o;
-}
-
-top::VLine::VLine(int x, int y, int len) : IDraw(), start{x,y}, length(len)
-{
-  if (len == 0) {
-    throw std::logic_error("USER invalid");
-  }
-}
-
-top::p_t top::VLine::begin() const
-{
-  return start;
-}
-
-top::p_t top::VLine::next(p_t p) const
-{
-  if (p.y == start.y + length - 1) {
-    return start;
-  }
-  if (length > 0) {
-    return p_t{start.x, p.y + 1};
-  }
-  return p_t{start.x, p.y - 1};
 }
 
 top::HLine::HLine(int x, int y, int len) : IDraw(), start{x, y}, length(len)
@@ -311,9 +246,5 @@ top::p_t top::Triangl::next(p_t p) const
 }
 
 
-// HLine VLine  clw
-// 45dgre Line clw
-// Square  hmw
-// Rectangl   hmw
 
 

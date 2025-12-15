@@ -15,6 +15,4 @@ namespace top {
   };
   size_t getPoints(IDraw* f, p_t** ps, size_t& s);
 }
-
-
 #endif
