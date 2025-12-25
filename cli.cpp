@@ -10,21 +10,22 @@ void skipLine(std::istream& is)
   is.ignore(lim_t::max(), '\n');
 }
 
-void hi(std::ostream& os, std::istream& is)
+void next(std::ostream& os, std::istream& is, size_t& context)
 {
-  unsigned i = 0;
+  size_t i = 0;
 
   if (!(is >> i)) {
     throw std::logic_error("EROR\n");
   }
+  context = i;
   skipLine(is);
-  os << "<Hi:" << i << "/>\n";
+  os << "<OK/>\n";
 }
 
 
-void hello(std::ostream& os, std::istream& is)
+void last(std::ostream& os, std::istream& is, size_t& context)
 {
-  os << "<Hello>\n";
+  os << "<last: "<< context <<"/>\n";
   skipLine(is);
 }
 
@@ -80,11 +81,12 @@ size_t match(const char* word, const char* const* words, size_t k)
 int main()
 {
   size_t k = 255;
-  using cmd_t = void(*)(std::ostream&, std::istream&);
-  cmd_t cmds[] = {hi, hello};
-  const char* const cmd_text[2] = { "hi", "hello"};
+  using cmd_t = void(*)(std::ostream&, std::istream&, size_t&);
+  cmd_t cmds[] = {next, last};
+  const char* const cmd_text[2] = { "next", "last"};
   char comm[256] = {};
   constexpr size_t COUNT_COMMAND = 2;
+  size_t context = 0;
 
   while (!getWord(std::cin, comm, k, is_space).eof()) {
     if (std::cin.fail()) {
@@ -94,7 +96,7 @@ int main()
     } else {
       if (size_t i = match(comm, cmd_text, COUNT_COMMAND); i < COUNT_COMMAND) {
         try {
-          cmds[i](std::cout, std::cin);
+          cmds[i](std::cout, std::cin, context);
         } catch (std::exception& e) {
           std::cerr << e.what();
           if (std::cin.fail()) {
