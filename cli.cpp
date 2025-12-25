@@ -4,18 +4,28 @@
 #include <cstring>
 #include <limits>
 
+void skipLine(std::istream& is)
+{
+  using lim_t = std::numeric_limits< std::streamsize >;
+  is.ignore(lim_t::max(), '\n');
+}
+
 void hi(std::ostream& os, std::istream& is)
 {
   unsigned i = 0;
+
   if (!(is >> i)) {
     throw std::logic_error("EROR");
   }
+  skipLine(is);
   os << "<Hi:" << i << "/>\n";
 }
+
 
 void hello(std::ostream& os, std::istream& is)
 {
   os << "<Hello>\n";
+  skipLine(is);
 }
 
 struct cmd {
@@ -90,11 +100,8 @@ int main()
           if (std::cin.fail()) {
             std::cin.clear(std::cin.rdstate() | std::ios::failbit);
           }
-          using lim_t = std::numeric_limits< std::streamsize >;
-          std::cin.ignore(lim_t::max(), '\n');
+          skipLine(std::cin);
         }
-
-
       } else {
         std::cerr << "INKNOWN COM\n";
       }
