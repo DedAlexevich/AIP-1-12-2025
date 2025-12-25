@@ -1,4 +1,4 @@
-#include "./IDraw.h"
+#include "IDraw.h"
 namespace {
   void extend(top::p_t** ps, size_t s, top::p_t p)
   {

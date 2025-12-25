@@ -4,7 +4,7 @@
 
 #ifndef AIP_1_12_2025_DOT_H
 #define AIP_1_12_2025_DOT_H
-#include "./IDraw.h"
+#include "IDraw.h"
 namespace top {
   struct Dot : IDraw {
     Dot(int x, int y);

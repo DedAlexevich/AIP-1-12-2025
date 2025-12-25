@@ -2,7 +2,7 @@
 // Created by Петр Кузнецов on 15.12.2025.
 //
 
-#include "./Square.h"
+#include "Square.h"
 
 top::Square::Square(int x, int y, int l):
   IDraw(),
@@ -35,4 +35,5 @@ top::p_t top::Square::next(p_t p) const
   } else if (p.y == start.y && p.x > start.x) {
     return {p.x - 1, p.y};
   }
+  return begin();
 }

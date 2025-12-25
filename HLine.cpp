@@ -2,7 +2,7 @@
 // Created by Петр Кузнецов on 15.12.2025.
 //
 
-#include "./HLine.h"
+#include "HLine.h"
 top::HLine::HLine(int x, int y, int len) : IDraw(), start{x, y}, length(len)
 {
   if (len == 0) {

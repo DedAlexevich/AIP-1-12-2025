@@ -4,7 +4,7 @@
 
 #ifndef AIP_1_12_2025_HLINE_H
 #define AIP_1_12_2025_HLINE_H
-#include "./IDraw.h"
+#include "IDraw.h"
 
 namespace top {
   struct HLine : IDraw {

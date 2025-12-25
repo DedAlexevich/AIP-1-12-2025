@@ -5,7 +5,7 @@
 #ifndef AIP_1_12_2025_IDRAW_H
 #define AIP_1_12_2025_IDRAW_H
 #include <cstddef>
-#include "../Geom.h"
+#include "Geom.h"
 
 namespace top {
   struct IDraw {

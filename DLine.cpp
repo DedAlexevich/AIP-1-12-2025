@@ -2,7 +2,7 @@
 // Created by Петр Кузнецов on 15.12.2025.
 //
 
-#include "./DLine.h"
+#include "DLine.h"
 
 top::DLine::DLine(int x, int y, int len):
   start{x, y},
