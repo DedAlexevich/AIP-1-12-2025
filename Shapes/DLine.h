@@ -4,7 +4,7 @@
 
 #ifndef AIP_1_12_2025_DLINE_H
 #define AIP_1_12_2025_DLINE_H
-#include "../IDraw.h"
+#include "./IDraw.h"
 namespace top {
   struct DLine : IDraw {
     DLine(int x, int y, int len);
