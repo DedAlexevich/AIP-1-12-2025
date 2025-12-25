@@ -2,7 +2,7 @@
 // Created by Петр Кузнецов on 15.12.2025.
 //
 
-#include "Triangl.h"
+#include "../Triangl.h"
 
 top::Triangl::Triangl(int x, int y, int l):
   start{x, y},

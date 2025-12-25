@@ -2,7 +2,7 @@
 // Created by Петр Кузнецов on 15.12.2025.
 //
 
-#include "Square.h"
+#include "../Square.h"
 
 top::Square::Square(int x, int y, int l):
   IDraw(),

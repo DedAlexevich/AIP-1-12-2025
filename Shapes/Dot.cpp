@@ -2,7 +2,7 @@
 // Created by Петр Кузнецов on 15.12.2025.
 //
 
-#include "Dot.h"
+#include "../Dot.h"
 
 top::Dot::Dot(int x, int y):
   IDraw(),

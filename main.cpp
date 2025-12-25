@@ -1,14 +1,14 @@
 #include <iostream>
 #include "Geom.h"
-#include "IDraw.h"
-#include "Dot.h"
-#include "VLine.h"
+#include "Shapes/IDraw.h"
+#include "Shapes/Dot.h"
+#include "Shapes/VLine.h"
 #include "canvas.h"
-#include "HLine.h"
-#include "DLine.h"
-#include "Rectangle.h"
-#include "Square.h"
-#include "Triangl.h"
+#include "Shapes/HLine.h"
+#include "Shapes/DLine.h"
+#include "Shapes/Rectangle.h"
+#include "Shapes/Square.h"
+#include "Shapes/Triangl.h"
 
 int main()
 {

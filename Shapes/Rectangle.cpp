@@ -2,7 +2,7 @@
 // Created by Петр Кузнецов on 15.12.2025.
 //
 
-#include "Rectangle.h"
+#include "../Rectangle.h"
 
 top::Rectangle::Rectangle(int x, int y, int a, int b):
   start{x,y},
