@@ -15,7 +15,7 @@ void hi(std::ostream& os, std::istream& is)
   unsigned i = 0;
 
   if (!(is >> i)) {
-    throw std::logic_error("EROR");
+    throw std::logic_error("EROR\n");
   }
   skipLine(is);
   os << "<Hi:" << i << "/>\n";
@@ -98,7 +98,7 @@ int main()
         } catch (std::exception& e) {
           std::cerr << e.what();
           if (std::cin.fail()) {
-            std::cin.clear(std::cin.rdstate() | std::ios::failbit);
+            std::cin.clear(std::cin.rdstate() & ~std::ios::failbit);
           }
           skipLine(std::cin);
         }
