@@ -26,7 +26,6 @@ void next(std::ostream& os, std::istream& is, size_t& context)
 void last(std::ostream& os, std::istream& is, size_t& context)
 {
   os << "<last: "<< context <<"/>\n";
-  skipLine(is);
 }
 
 struct cmd {
@@ -58,6 +57,7 @@ std::istream& getWord(std::istream& is, char* word, size_t k, bool(*c)(char))
   }
   return is;
 }
+
 bool is_space(char t)
 {
   return std::isspace(t);

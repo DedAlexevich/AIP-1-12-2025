@@ -1,6 +1,6 @@
 SRC_ALL = $(wildcard *.cpp )
 SRC = $(filter-out cli.cpp, $(SRC_ALL))
-CFLAGS += -Wall -Wextra -std=c++17
+CFLAGS += -Wall -Wextra -std=c++17 -Wc++17-extensions
 OBJ = $(SRC:%.cpp=%.o)
 
 paint: $(OBJ)
